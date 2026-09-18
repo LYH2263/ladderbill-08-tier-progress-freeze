@@ -22,6 +22,15 @@ def init_db():
         result_json TEXT,
         created_at TEXT
     );
+    CREATE TABLE IF NOT EXISTS tier_freezes(
+        id INTEGER PRIMARY KEY,
+        account_id INTEGER NOT NULL,
+        year INTEGER NOT NULL,
+        frozen_kwh REAL NOT NULL,
+        frozen_at TEXT NOT NULL,
+        note TEXT,
+        unfrozen_at TEXT
+    );
     """
     )
     if conn.execute("SELECT COUNT(*) c FROM accounts").fetchone()["c"] == 0:

@@ -6,11 +6,21 @@ class BillRequest(BaseModel):
     kwh: float = Field(ge=0)
     peak: bool = False
     persist: bool = True
+    year: int | None = None
 
 
 class CompareRequest(BaseModel):
     kwh: float = Field(ge=0)
     persist: bool = False
+
+
+class FreezeRequest(BaseModel):
+    year: int | None = None
+    note: str | None = None
+
+
+class UnfreezeRequest(BaseModel):
+    year: int | None = None
 
 
 class CalcRunOut(BaseModel):

@@ -9,7 +9,7 @@ router = APIRouter(tags=["billing"])
 @router.post("/bill")
 def post_bill(body: BillRequest):
     with BillingService() as svc:
-        return svc.run_bill(body.kwh, body.peak, body.account_id, body.persist)
+        return svc.run_bill(body.kwh, body.peak, body.account_id, body.persist, body.year)
 
 
 @router.post("/compare")
