@@ -22,6 +22,18 @@ def init_db():
         result_json TEXT,
         created_at TEXT
     );
+    CREATE TABLE IF NOT EXISTS freeze_points(
+        id INTEGER PRIMARY KEY,
+        account_id INTEGER NOT NULL,
+        year INTEGER NOT NULL,
+        frozen_kwh REAL NOT NULL,
+        year_kwh REAL NOT NULL,
+        status TEXT NOT NULL DEFAULT 'frozen',
+        run_id INTEGER,
+        note TEXT,
+        created_at TEXT NOT NULL,
+        unfrozen_at TEXT
+    );
     """
     )
     if conn.execute("SELECT COUNT(*) c FROM accounts").fetchone()["c"] == 0:

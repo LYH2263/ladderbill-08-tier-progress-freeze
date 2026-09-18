@@ -6,6 +6,7 @@ class BillRequest(BaseModel):
     kwh: float = Field(ge=0)
     peak: bool = False
     persist: bool = True
+    year: int | None = None
 
 
 class CompareRequest(BaseModel):
@@ -20,3 +21,12 @@ class CalcRunOut(BaseModel):
     input_json: str
     result_json: str
     created_at: str
+
+
+class FreezeRequest(BaseModel):
+    year: int | None = None
+    note: str | None = None
+
+
+class UnfreezeRequest(BaseModel):
+    year: int | None = None

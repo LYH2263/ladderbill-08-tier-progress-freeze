@@ -9,8 +9,9 @@ def insert(
     payload: dict,
     result: dict,
     account_id: int | None = None,
+    created_at: str | None = None,
 ) -> int:
-    now = datetime.now(timezone.utc).isoformat()
+    now = created_at or datetime.now(timezone.utc).isoformat()
     cur = conn.execute(
         """
         INSERT INTO calc_runs(kind, account_id, input_json, result_json, created_at)
@@ -33,3 +34,17 @@ def list_recent(conn: sqlite3.Connection, limit: int = 50) -> list[dict]:
 def get(conn: sqlite3.Connection, run_id: int) -> dict | None:
     row = conn.execute("SELECT * FROM calc_runs WHERE id=?", (run_id,)).fetchone()
     return dict(row) if row else None
+
+
+def bill_rows_for_account(conn: sqlite3.Connection, account_id: int) -> list[dict]:
+    """该户全部已落库计费(bill)运行，按 id 正序。
+
+    自然年归属由服务层按 input_json.year（缺省回退 created_at 年份）判定。
+    """
+    q = """
+    SELECT id, kind, account_id, input_json, result_json, created_at
+    FROM calc_runs
+    WHERE account_id=? AND kind='bill'
+    ORDER BY id
+    """
+    return [dict(r) for r in conn.execute(q, (account_id,)).fetchall()]
